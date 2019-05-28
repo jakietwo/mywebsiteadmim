@@ -10,9 +10,19 @@ export default new Router({
   routes: [
     {
       path: "/",
+      redirect: "/login"
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: () => import("@/views/login")
+    },
+    {
+      path: "/home",
       name: "home",
       component: Home
     },
+
     {
       path: "/about",
       name: "about",
