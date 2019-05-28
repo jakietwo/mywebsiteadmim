@@ -1,5 +1,6 @@
 # mywebsiteadmin
 ## 基于ant-design-vue UI框架的个人博客PC管理端项目 
+使用vue全家桶+axios
 ## Project setup
 ```
 npm install
