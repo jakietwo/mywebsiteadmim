@@ -18,7 +18,7 @@ export default new Router({
       component: () => import("@/views/login"),
       beforeEnter: (to, from, next) => {
         if (store.state.token) {
-          next("/home");
+          next("/home/index");
         } else {
           next();
         }
@@ -27,7 +27,44 @@ export default new Router({
     {
       path: "/home",
       name: "home",
-      component: Home
+      component: Home,
+      children: [
+        {
+          path: "index",
+          name: "myhome",
+          component: () => import("@/views/myhome/index")
+        },
+        {
+          path: "article",
+          name: "article",
+          component: () => import("@/views/article/index")
+        },
+        {
+          path: "category",
+          name: "category",
+          component: () => import("@/views/category/index")
+        },
+        {
+          path: "tag",
+          name: "tag",
+          component: () => import("@/views/tag/index")
+        },
+        {
+          path: "reply",
+          name: "reply",
+          component: () => import("@/views/reply/index")
+        },
+        {
+          path: "comment",
+          name: "comment",
+          component: () => import("@/views/comment/index")
+        },
+        {
+          path: "user",
+          name: "user",
+          component: () => import("@/views/user/index")
+        }
+      ]
     },
 
     {

@@ -79,7 +79,8 @@ export default {
           console.log("response", response);
           if (response.success) {
             this.$store.commit("saveToken", response.token);
-            this.$router.push("/home");
+            this.$store.commit("saveUsername", values.username);
+            this.$router.push("/home/index");
           } else {
             this.errorMsg = response.message;
           }
