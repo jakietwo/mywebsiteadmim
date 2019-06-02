@@ -1,13 +1,22 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
+import { getAllTagList } from "./api/Tag";
+import { getAllCategoryList } from "./api/Category";
+import { getUserList } from "./api/User";
+import { getAllArticleList } from "./api/Article";
+import { axios } from "./api/axios";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     token: "",
-    username: ""
+    username: "",
+    UserList: [],
+    TagList: [],
+    CategoryList: [],
+    ArticleList: []
   },
   mutations: {
     saveToken(state, data) {
@@ -15,9 +24,46 @@ export default new Vuex.Store({
     },
     saveUsername(state, data) {
       this.state.username = data;
+    },
+    setUserList(state, data) {
+      this.state.UserList = data;
+    },
+    setArticleList(state, data) {
+      state.ArticleList = data;
+    },
+    setCategoryList(state, data) {
+      state.CategoryList = data;
+    },
+    setTagList(state, data) {
+      state.TagList = data;
     }
   },
-  actions: {},
+  actions: {
+    async getUserList({ commit }) {
+      let response = await getUserList();
+      if (response.length) {
+        commit("setUserList", response);
+      }
+    },
+    async getArticleList({ commit }) {
+      let response = await getAllArticleList();
+      if (response.length) {
+        commit("setArticleList", response);
+      }
+    },
+    async getCategoryList({ commit }) {
+      let response = await getAllCategoryList();
+      if (response.length) {
+        commit("setCategoryList", response);
+      }
+    },
+    async getTagList({ commit }) {
+      let response = await getAllTagList();
+      if (response.length) {
+        commit("setTagList", response);
+      }
+    }
+  },
   plugins: [
     createPersistedState({
       storage: window.sessionStorage

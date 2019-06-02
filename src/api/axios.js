@@ -1,10 +1,14 @@
 import axios from "axios";
-import store from "./../store";
+import store from "./../store.js";
 axios.defaults.baseURL = "http://127.0.0.1:7001";
-axios.defaults.headers.common["Authorization"] = store.state.token;
+console.log(store);
+// axios.defaults.headers.common["Authorization"] = store.token;
 axios.defaults.timeout = 5000;
 axios.interceptors.request.use(
   config => {
+    if (store.state.token) {
+      config.headers.common["Authorization"] = "bearke " + store.state.token;
+    }
     return config;
   },
   error => {

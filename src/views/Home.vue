@@ -77,14 +77,29 @@ export default {
   },
   computed: {},
   watch: {},
+  created() {
+    this._initUserList();
+    this._initArticleList();
+    this._initCategoryList();
+    this._initTagList();
+  },
   mounted() {},
   methods: {
     handleClick(e) {
-      console.log("click", e);
       this.$router.push({ name: e.key });
     },
-    titleClick(e) {
-      console.log("titleClick", e);
+    titleClick() {},
+    _initUserList() {
+      this.$store.dispatch("getUserList");
+    },
+    _initArticleList() {
+      this.$store.dispatch("getArticleList");
+    },
+    _initCategoryList() {
+      this.$store.dispatch("getCategoryList");
+    },
+    _initTagList() {
+      this.$store.dispatch("getTagList");
     }
   }
 };

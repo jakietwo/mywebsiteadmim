@@ -1,7 +1,7 @@
 <template>
   <div class="MyHeader">
     <div style="flex: 1;text-align: center; font-size: 24px;">
-      JAKIETWO个人博客
+      JAKIETWO个人博客管理端
     </div>
     <a-dropdown v-model="visible" style="margin-right: 20px; width: 40px;">
       <a-avatar :size="40" style="color: #f56a00; backgroundColor: #fde3cf;">
