@@ -3,6 +3,8 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import antd from "ant-design-vue";
+import mavonEditor from "mavon-editor";
+import "mavon-editor/dist/css/index.css";
 import { axios } from "./api/axios";
 import "ant-design-vue/dist/antd.css";
 import "./registerServiceWorker";
@@ -17,6 +19,7 @@ router.beforeEach((to, from, next) => {
   }
 });
 Vue.use(antd);
+Vue.use(mavonEditor);
 new Vue({
   router,
   store,

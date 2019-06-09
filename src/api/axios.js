@@ -7,7 +7,7 @@ axios.defaults.timeout = 5000;
 axios.interceptors.request.use(
   config => {
     if (store.state.token) {
-      config.headers.common["Authorization"] = "bearke " + store.state.token;
+      config.headers.common["Authorization"] = "beakre " + store.state.token;
     }
     return config;
   },
