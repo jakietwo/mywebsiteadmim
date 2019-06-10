@@ -67,7 +67,8 @@ export default {
   data() {
     return {
       columns,
-      articleList: []
+      articleList: [],
+      showAddModal: false
     };
   },
   computed: {
@@ -107,7 +108,12 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    handleAdd() {},
+    handleAdd() {
+      this.$router.push("addArticle");
+    },
+    closeModal() {
+      this.showAddModal = false;
+    },
     onDelete() {},
     editArticle(record) {
       console.log("record", record);

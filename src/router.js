@@ -40,6 +40,11 @@ export default new Router({
           component: () => import("@/views/article/index")
         },
         {
+          path: "addArticle",
+          name: "addArticle",
+          component: () => import("@/views/article/addArticle")
+        },
+        {
           path: "category",
           name: "category",
           component: () => import("@/views/category/index")
