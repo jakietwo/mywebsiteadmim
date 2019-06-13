@@ -1,10 +1,22 @@
 <template>
   <div class="index">
     <a-button class="editable-add-btn" @click="handleAdd">添加文章</a-button>
-    <a-table :columns="columns" :dataSource="articleList" bordered rowKey="id">
+    <a-table
+      :columns="columns"
+      :dataSource="articleList"
+      bordered
+      :pagination="pagination"
+      :rowClassName="rowClassName"
+      rowKey="id"
+    >
       <template slot="operation" slot-scope="text, record">
         <a-button type="danger" @click="editArticle(record)">编辑</a-button>
-        <a-button type="danger" style="margin-left: 10px;">删除</a-button>
+        <a-button
+          type="danger"
+          style="margin-left: 10px;"
+          @click="deleteArticle(record)"
+          >删除</a-button
+        >
       </template>
       <span slot="categorys" slot-scope="categorys">
         <a-tag v-for="category in categorys" color="blue" :key="category.id">
@@ -21,19 +33,28 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import { handleCreateTime } from "../../common/handleTime";
+import { handleCreateTime, sortByCreateTime } from "../../common/handleTime";
 import { deepClone } from "../../common/deepClone";
+import { deleteArticle } from "../../api/Article";
+import { deleteTag } from "../../api/Tag";
+import { deleteCategory } from "../../api/Category";
 
 const columns = [
   {
     title: "标题",
     dataIndex: "title",
-    scopedSlots: { customRender: "title" }
+    scopedSlots: { customRender: "title" },
+    customRender: (value, row, index) => {
+      return value.slice(0, 8);
+    }
   },
   {
     title: "内容",
     dataIndex: "content",
-    scopedSlots: { customRender: "content" }
+    scopedSlots: { customRender: "content" },
+    customRender: (value, row, index) => {
+      return value.slice(0, 35);
+    }
   },
   {
     title: "分类",
@@ -68,7 +89,10 @@ export default {
     return {
       columns,
       articleList: [],
-      showAddModal: false
+      showAddModal: false,
+      pagination: {
+        pageSize: 6
+      }
     };
   },
   computed: {
@@ -82,11 +106,12 @@ export default {
   watch: {
     ArticleList: {
       handler(newval) {
-        if (!newval.length) {
+        if (!newval.length || !newval) {
           return;
         }
         this.articleList = deepClone(newval);
         this.articleList = handleCreateTime(this.articleList);
+        this.articleList = sortByCreateTime(this.articleList);
         this.articleList = this._addCategoryToArticle(
           this.articleList,
           this.CategoryList
@@ -117,6 +142,39 @@ export default {
     onDelete() {},
     editArticle(record) {
       console.log("record", record);
+    },
+    deleteArticle(record) {
+      console.log("record", record);
+      let that = this;
+      this.$confirm({
+        title: `确定删除文章-${record.title}?`,
+        content: "删除后将不能恢复!请谨慎选择",
+        async onOk() {
+          let articleId = record.id;
+          let res = await deleteArticle(articleId);
+          if (res.success) {
+            that.$notification.success({
+              message: "提示!",
+              description: "删除文章成功!"
+            });
+          }
+          let categorys = record.categorys;
+          let tags = record.tags;
+          categorys.forEach(async category => {
+            let res1 = await deleteCategory(category.id);
+          });
+          tags.forEach(async tag => {
+            let res2 = await deleteTag(tag.id);
+          });
+          that.$store.dispatch("getArticleList");
+          that.$store.dispatch("getCategoryList");
+          that.$store.dispatch("getTagList");
+        },
+        onCancel() {}
+      });
+    },
+    rowClassName() {
+      return "rowClassName";
     },
     /**
      * 将category 分类添加到文章里面
@@ -162,4 +220,6 @@ export default {
 .index
   .editable-add-btn
     margin-bottom 10px;
+  .rowClassName
+    max-height 60px !important;
 </style>

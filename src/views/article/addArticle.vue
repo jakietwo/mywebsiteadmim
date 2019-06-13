@@ -22,33 +22,20 @@
     <div class="select-wrapper">
       <div class="category">
         <h4>选择分类</h4>
-        <a-select
-          labelInValue
-          style="width: 120px"
-          @change="handleChangeCategory"
-        >
-          <a-select-option
-            :value="category.id"
-            v-for="(category, index) in Categorys"
-            v-bind:key="index"
-            >{{ category.name }}
-          </a-select-option>
-        </a-select>
+        <a-input
+          style="width: 120px;"
+          v-model="selectCategoryValue"
+          placeholder="输入分类"
+        ></a-input>
       </div>
       <div class="tag">
         <h4>选择标签</h4>
         <a-select
           labelInValue
-          mode="multiple"
+          mode="tags"
           style="min-width: 120px;"
           @change="handleChangeTag"
         >
-          <a-select-option
-            :value="tag.id"
-            v-for="(tag, index1) in Tags"
-            v-bind:key="index1"
-            >{{ tag.name }}
-          </a-select-option>
         </a-select>
       </div>
     </div>
@@ -58,6 +45,10 @@
   </div>
 </template>
 <script>
+import { createArticle } from "../../api/Article";
+import { createCategory } from "../../api/Category";
+import { createTag } from "../../api/Tag";
+import axios from "axios";
 export default {
   name: "addArticle",
   props: {},
@@ -68,13 +59,18 @@ export default {
       titleValue: "",
       articleContent: "",
       selectCategoryValue: "",
-      selectTagValue: undefined
+      selectTagValue: undefined,
+      Categorys: [
+        { value: "CSS", label: "CSS" },
+        { value: "Node", label: "Node" },
+        { value: "HTML", label: "HTML" },
+        { value: "JavaScript", label: "JavaScript" },
+        { value: "Vue", label: "Vue" },
+        { value: "React", label: "React" }
+      ]
     };
   },
   computed: {
-    Categorys() {
-      return this.$store.state.CategoryList;
-    },
     Tags() {
       return this.$store.state.TagList;
     }
@@ -100,7 +96,7 @@ export default {
     goBack() {
       this.$router.go(-1);
     },
-    confirm() {
+    async confirm() {
       let data = {};
       if (!this.titleValue || !this.articleContent) {
         this.$message.error("请输入标题或文章内容");
@@ -109,6 +105,36 @@ export default {
       data.title = this.titleValue;
       data.content = JSON.stringify(this.articleContent);
       console.log("data", data);
+      console.log("ssss", this.selectCategoryValue);
+      console.log("ssss", this.selectTagValue);
+      let response = await createArticle(data);
+      console.log("添加文章", response);
+      if (response.success) {
+        let articleId = response.articleId;
+        let categoryData = {
+          articleId: articleId,
+          name: this.selectCategoryValue.trim()
+        };
+        let res1 = await createCategory(categoryData);
+        let tagSuccess = true;
+        this.selectTagValue.forEach(async tag => {
+          let tagData = {
+            name: tag.label.trim(),
+            articleId: articleId
+          };
+          let res = await createTag(tagData);
+          if (!res.success) {
+            tagSuccess = false;
+          }
+        });
+        this.$notification.success({
+          message: "提示!",
+          description: "添加文章成功!"
+        });
+        this.$store.dispatch("getArticleList");
+        this.$store.dispatch("getCategoryList");
+        this.$store.dispatch("getTagList");
+      }
     }
   }
 };
@@ -134,6 +160,7 @@ export default {
     width 100%
     max-height 400px
   .select-wrapper
+    position relative
     width 100%
     height 80px;
     display flex
@@ -141,6 +168,8 @@ export default {
     align-items center
     .category
       flex 1
+      position relative
+      z-index 9999
     .tag
       flex 1
   .confirm-btn

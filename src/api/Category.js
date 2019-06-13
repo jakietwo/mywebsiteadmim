@@ -7,5 +7,12 @@ async function getAllCategoryList() {
   let response = await axios.get("/api/v1/categorys");
   return response.data;
 }
-
-export { getAllCategoryList };
+async function createCategory(data) {
+  let response = await axios.post("/api/v1/categorys", data);
+  return response.data;
+}
+async function deleteCategory(id) {
+  let response = await axios.delete("/api/v1/categorys/" + id);
+  return response.data;
+}
+export { getAllCategoryList, createCategory, deleteCategory };

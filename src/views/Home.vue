@@ -108,6 +108,11 @@ export default {
 .home
   width 100vw
   height 100vh
+  #components-layout-demo-custom-trigger{
+    width 100%
+    height 100%
+
+  }
   #components-layout-demo-custom-trigger .trigger {
     font-size: 18px;
     line-height: 64px;
@@ -116,7 +121,8 @@ export default {
     transition: color .3s;
   }
   .slider
-    height 100vh
+    position relative
+    height 100%
   #components-layout-demo-custom-trigger .trigger:hover {
     color: #1890ff;
   }

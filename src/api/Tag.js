@@ -8,4 +8,12 @@ async function getAllTagList() {
   return response.data;
 }
 
-export { getAllTagList };
+async function createTag(data) {
+  let response = await axios.post("/api/v1/tags", data);
+  return response.data;
+}
+async function deleteTag(id) {
+  let response = await axios.delete("/api/v1/tags/" + id);
+  return response.data;
+}
+export { getAllTagList, createTag, deleteTag };

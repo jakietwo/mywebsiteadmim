@@ -22,4 +22,10 @@ function transferDateToYMD(dateTime) {
   const day = date.getDate();
   return year + "-" + month + "-" + day;
 }
-export { handleCreateTime, transferDateToYMD };
+function sortByCreateTime(articles) {
+  articles.sort((a, b) => {
+    return new Date(b.createTime).getTime() - new Date(a.createTime).getTime();
+  });
+  return articles;
+}
+export { handleCreateTime, transferDateToYMD, sortByCreateTime };
