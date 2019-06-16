@@ -16,7 +16,8 @@ export default new Vuex.Store({
     UserList: [],
     TagList: [],
     CategoryList: [],
-    ArticleList: []
+    ArticleList: [],
+    record: {}
   },
   mutations: {
     saveToken(state, data) {
@@ -36,32 +37,27 @@ export default new Vuex.Store({
     },
     setTagList(state, data) {
       state.TagList = data;
+    },
+    setRecord(state, data) {
+      state.record = data;
     }
   },
   actions: {
     async getUserList({ commit }) {
       let response = await getUserList();
-      if (response.length) {
-        commit("setUserList", response);
-      }
+      commit("setUserList", response);
     },
     async getArticleList({ commit }) {
       let response = await getAllArticleList();
-      if (response.length) {
-        commit("setArticleList", response);
-      }
+      commit("setArticleList", response);
     },
     async getCategoryList({ commit }) {
       let response = await getAllCategoryList();
-      if (response.length) {
-        commit("setCategoryList", response);
-      }
+      commit("setCategoryList", response);
     },
     async getTagList({ commit }) {
       let response = await getAllTagList();
-      if (response.length) {
-        commit("setTagList", response);
-      }
+      commit("setTagList", response);
     }
   },
   plugins: [

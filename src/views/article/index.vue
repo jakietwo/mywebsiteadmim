@@ -110,16 +110,7 @@ export default {
           return;
         }
         this.articleList = deepClone(newval);
-        this.articleList = handleCreateTime(this.articleList);
-        this.articleList = sortByCreateTime(this.articleList);
-        this.articleList = this._addCategoryToArticle(
-          this.articleList,
-          this.CategoryList
-        );
-        this.articleList = this._addTagToArticle(
-          this.articleList,
-          this.TagList
-        );
+        this._updateDATA();
       },
       immediate: true,
       deep: true
@@ -128,6 +119,9 @@ export default {
       handler(newval) {},
       immediate: true,
       deep: true
+    },
+    TagList(newval) {
+      this._updateDATA();
     }
   },
   created() {},
@@ -141,10 +135,15 @@ export default {
     },
     onDelete() {},
     editArticle(record) {
-      console.log("record", record);
+      this.$router.push({
+        path: "" + record.id,
+        props: {
+          record
+        }
+      });
+      this.$store.commit("setRecord", record);
     },
     deleteArticle(record) {
-      console.log("record", record);
       let that = this;
       this.$confirm({
         title: `确定删除文章-${record.title}?`,
@@ -175,6 +174,15 @@ export default {
     },
     rowClassName() {
       return "rowClassName";
+    },
+    _updateDATA() {
+      this.articleList = handleCreateTime(this.articleList);
+      this.articleList = sortByCreateTime(this.articleList);
+      this.articleList = this._addCategoryToArticle(
+        this.articleList,
+        this.CategoryList
+      );
+      this.articleList = this._addTagToArticle(this.articleList, this.TagList);
     },
     /**
      * 将category 分类添加到文章里面

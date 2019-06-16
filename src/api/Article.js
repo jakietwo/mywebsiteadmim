@@ -16,4 +16,8 @@ async function deleteArticle(id) {
   let response = await axios.delete("/api/v1/articles/" + id);
   return response.data;
 }
-export { getAllArticleList, createArticle, deleteArticle };
+async function updateArticle(id, data) {
+  let response = await axios.put("/api/v1/articles/" + id, data);
+  return response.data;
+}
+export { getAllArticleList, createArticle, deleteArticle, updateArticle };

@@ -39,16 +39,15 @@
         </a-select>
       </div>
     </div>
-    <a-button type="primary" class="confirm-btn" @click="confirm"
-      >确定</a-button
-    >
+    <a-button type="primary" class="confirm-btn" @click="confirm">
+      确定
+    </a-button>
   </div>
 </template>
 <script>
 import { createArticle } from "../../api/Article";
 import { createCategory } from "../../api/Category";
 import { createTag } from "../../api/Tag";
-import axios from "axios";
 export default {
   name: "addArticle",
   props: {},
@@ -80,17 +79,13 @@ export default {
   mounted() {},
   methods: {
     handleChangeCategory(value) {
-      console.log("change", value.label.trim());
       this.selectCategoryValue = value.label.trim();
     },
     handleChangeTag(value) {
       //  value 是个数组
-      console.log("change", value);
       this.selectTagValue = value;
     },
     changeEditorValue(value, render) {
-      console.log("value", value);
-      console.log("render", render);
       this.articleContent = render;
     },
     goBack() {
@@ -104,11 +99,7 @@ export default {
       }
       data.title = this.titleValue;
       data.content = JSON.stringify(this.articleContent);
-      console.log("data", data);
-      console.log("ssss", this.selectCategoryValue);
-      console.log("ssss", this.selectTagValue);
       let response = await createArticle(data);
-      console.log("添加文章", response);
       if (response.success) {
         let articleId = response.articleId;
         let categoryData = {

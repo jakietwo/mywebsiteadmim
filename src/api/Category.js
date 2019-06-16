@@ -15,4 +15,8 @@ async function deleteCategory(id) {
   let response = await axios.delete("/api/v1/categorys/" + id);
   return response.data;
 }
-export { getAllCategoryList, createCategory, deleteCategory };
+async function updateCategory(id, data) {
+  let response = await axios.put("/api/v1/categorys/" + id, data);
+  return response.data;
+}
+export { getAllCategoryList, createCategory, deleteCategory, updateCategory };

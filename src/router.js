@@ -45,6 +45,11 @@ export default new Router({
           component: () => import("@/views/article/addArticle")
         },
         {
+          path: ":id",
+          name: "editArticle",
+          component: () => import("@/views/article/editArticle")
+        },
+        {
           path: "category",
           name: "category",
           component: () => import("@/views/category/index")

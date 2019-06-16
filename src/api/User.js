@@ -9,4 +9,18 @@ async function getUserList() {
   return response.data;
 }
 
-export { getUserList };
+async function createUser(data) {
+  let response = await axios.post("/api/v1/users", data);
+  return response.data;
+}
+
+async function deleteUser(id) {
+  let response = await axios.delete("/api/v1/users/" + id);
+  return response.data;
+}
+
+async function updateUser(id, data) {
+  let response = await axios.put("/api/v1/users/" + id, data);
+  return response.data;
+}
+export { getUserList, createUser, deleteUser, updateUser };
