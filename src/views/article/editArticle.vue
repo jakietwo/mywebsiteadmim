@@ -15,6 +15,7 @@
       ></a-input>
     </div>
     <mavon-editor
+      :ishljs="false"
       class="mavenEditor"
       @change="changeEditorValue"
       v-model="data.content"
@@ -98,23 +99,31 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    changeEditorValue() {},
+    changeEditorValue(value, render) {
+      console.log("value");
+      console.log(value);
+      console.log("render");
+      console.log(render);
+    },
     // 点击确定
     async confirm() {
       if (!this.data.content || !this.data.title) {
         this.$message.error("请输入标题和内容");
         return;
       }
+      this.data.content = JSON.stringify(this.data.content);
       let res = await updateArticle(this.data.id, this.data);
       if (res.success) {
-        let res = await updateCategory(this.selectCategory[0].id, {
-          name: this.selectCategory[0].name
-        });
-        this.$notification.success({
-          message: "提示!",
-          description: "更新文章成功!"
-        });
-        this._updateDATA();
+        if (this.selectCategory) {
+          let res = await updateCategory(this.selectCategory[0].id, {
+            name: this.selectCategory[0].name
+          });
+          this.$notification.success({
+            message: "提示!",
+            description: "更新文章成功!"
+          });
+          this._updateDATA();
+        }
       }
     },
     goBack() {

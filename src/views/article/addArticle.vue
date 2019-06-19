@@ -86,7 +86,7 @@ export default {
       this.selectTagValue = value;
     },
     changeEditorValue(value, render) {
-      this.articleContent = render;
+      this.articleContent = value;
     },
     goBack() {
       this.$router.go(-1);
@@ -102,22 +102,25 @@ export default {
       let response = await createArticle(data);
       if (response.success) {
         let articleId = response.articleId;
-        let categoryData = {
-          articleId: articleId,
-          name: this.selectCategoryValue.trim()
-        };
-        let res1 = await createCategory(categoryData);
-        let tagSuccess = true;
-        this.selectTagValue.forEach(async tag => {
-          let tagData = {
-            name: tag.label.trim(),
-            articleId: articleId
+        if (this.selectCategoryValue) {
+          let categoryData = {
+            articleId: articleId,
+            name: this.selectCategoryValue.trim()
           };
-          let res = await createTag(tagData);
-          if (!res.success) {
-            tagSuccess = false;
-          }
-        });
+          await createCategory(categoryData);
+        }
+        if (this.selectTagValue && this.selectTagValue.length) {
+          this.selectTagValue.forEach(async tag => {
+            let tagData = {
+              name: tag.label.trim(),
+              articleId: articleId
+            };
+            let res = await createTag(tagData);
+            if (!res.success) {
+              tagSuccess = false;
+            }
+          });
+        }
         this.$notification.success({
           message: "提示!",
           description: "添加文章成功!"
